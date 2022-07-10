@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<!--
+ @license
+ Copyright 2019 Google LLC. All Rights Reserved.
+ SPDX-License-Identifier: Apache-2.0
+-->
+<html>
+  <head>
+    <title>Add Map</title>
+    <style>
+      body {
+        background-color: #9d7afd;
+      }
+
+      h1 {
+        margin: 0 auto;
+        text-align: center;
+        font-family: Arial, Helvetica, sans-serif;
+        padding: 2em 0;
+        color: white;
+      }
+
+
+      #map {
+        height: 600px;
+        /* The height is 400 pixels */
+        width: 80%;
+        /* The width is the width of the web page */
+
+        margin: 0 auto;
+      }
+
+    </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <!-- File name only if in same directory; do not put a slash before the name, other you will get a "Failed to Load Resource" error -->
+    <script type="text/javascript" src="locations-jsdata.js"></script> 
+    <script>
+      // Initialize and add the map
+      function initMap() {
+        // Coordinates the center of Texas
+        const texas_center = { 
+          lat: 31.4723032, 
+          lng: -99.047022 
+        };
+        // The map, centered at Texas
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 6.5,
+          center: texas_center,
+        });
+
+        
+        const markers = [];
+
+        for (arr in myData) {
+            var row = myData[arr];
+            window.console && console.log(row);
+            const newLatlng = {
+              lat: row[0], 
+              lng: row[1]
+            };
+            const marker = new google.maps.Marker({
+                position: newLatlng,
+                map: map,
+                title: row[2]
+            });
+            markers.push(marker);
+        }
+      }
+      window.initMap = initMap;
+
+    </script>
+  </head>
+  <body>
+    <h1 style>Community Colleges in Texas</h1>
+    <!--The div element for the map -->
+    <div id="map"></div>
+
+    <!-- 
+     The `defer` attribute causes the callback to execute after the full HTML
+     document has been parsed. For non-blocking uses, avoiding race conditions,
+     and consistent behavior across browsers, consider loading using Promises
+     with https://www.npmjs.com/package/@googlemaps/js-api-loader.
+    -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVKKZosgmWkA_38dsCftM-9huQ-P-IZS0&callback=initMap&v=weekly"
+      defer
+    ></script>
+  </body>
+</html>
